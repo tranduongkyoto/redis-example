@@ -21,6 +21,9 @@ const getRepos = async (req, res, next) => {
     const { username } = req.params;
 
     const response = await fetch(`https://api.github.com/users/${username}`);
+    if (response.status == '404') {
+      return res.send('User name invalid');
+    }
     const data = await response.json();
     const repos = data.public_repos;
     client.setex(username, 600, repos);
